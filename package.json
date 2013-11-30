@@ -1,0 +1,31 @@
+{
+  "name": "dragon-viewer",
+  "description": "image viewer and organizer.",
+  "version": "0.0.0",
+  "homepage": "http://infocraft.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cryptoquick/dragon-viewer.git"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "devDependencies": {
+    "browserify": "~2.36.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-browserify": "~1.2.11",
+    "grunt-ember-templates": "~0.4.17",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-curl": "~1.2.1",
+    "grunt-contrib-stylus": "~0.10.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-node-webkit-builder": "~0.1.11",
+    "grunt-emblem": "~0.1.0"
+  },
+  "dependencies": {
+    "filewalker": "~0.1.2"
+  }
+}
