@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 
     browserify: {
       files: {
-        'public/app.js': 'app/index.js'
+        'public/<%= pkg.name %>.js': 'app/index.js'
       },
       options: {
         debug: grunt.cli.tasks[0] !== 'dist',
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
     emblem: {
       compile: {
         files: {
-          'tmp/templates.js': 'app/templates/**/*.emblem', //1:1 compile
+          'tmp/templates.js': 'app/templates/**/*.emblem',
         },
         options: {
           root: 'app/templates/',
@@ -79,10 +79,22 @@ module.exports = function(grunt) {
       }
     },
 
+    handlebars: {
+      compile: {
+        options: {
+          namespace: 'Ember.TEMPLATES',
+          node: true
+        },
+        files: {
+          'tmp/templates.js': 'app/templates/**/*.hbs',
+        }
+      }
+    },
+
     uglify: {
       'default': {
         files: {
-          'public/<%= pkg.name %>.min.js': ['tmp/app.js']
+          'public/<%= pkg.name %>.min.js': ['tmp/<%= pkg.name %>.js']
         }
       }
     },
@@ -147,6 +159,6 @@ module.exports = function(grunt) {
   })
   
   grunt.registerTask('setup', ['curl'])
-  grunt.registerTask('default', ['stylus', 'emblem', 'browserify'])
+  grunt.registerTask('default', ['stylus', 'handlebars', 'browserify'])
   grunt.registerTask('dist', ['clean', 'default', 'copy'])
 }

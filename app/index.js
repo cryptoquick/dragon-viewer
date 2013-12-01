@@ -1,10 +1,11 @@
-var $ = require('jquery'),
-  Handlebars = require('handlebars'),
-  Emblem = require('emblem'),
-  Ember = require('ember'),
-  DS = require('ember-data'),
-  pouchdb = require('pouchdb'),
-  EPDB = require('ember-pouchdb'),
+var $              = require('jquery'),
+  Handlebars       = require('handlebars'),
+  Emblem           = require('emblem'),
+  Ember            = require('ember'),
+  Ember.TEMPLATES  = require('../tmp/templates.js')
+  DS               = require('ember-data'),
+  pouchdb          = require('pouchdb'),
+  EPDB             = require('ember-pouchdb'),
 
 var App = Ember.Application.create();
 
