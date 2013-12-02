@@ -159,6 +159,6 @@ module.exports = function(grunt) {
   })
   
   grunt.registerTask('setup', ['curl'])
-  grunt.registerTask('default', ['stylus', 'handlebars', 'browserify'])
+  grunt.registerTask('default', ['stylus', 'emblem', 'browserify'])
   grunt.registerTask('dist', ['clean', 'default', 'copy'])
 }
