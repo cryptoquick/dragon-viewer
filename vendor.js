@@ -1,0 +1,7 @@
+$           = require('jquery')
+Handlebars  = require('handlebars')
+Emblem      = require('emblem')
+Ember       = require('ember')
+DS          = require('ember-data')
+pouchdb     = require('pouchdb')
+EPDB        = require('ember-pouchdb')

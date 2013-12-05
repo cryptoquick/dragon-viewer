@@ -36,29 +36,43 @@ module.exports = function(grunt) {
     },
 
     browserify: {
-      files: {
-        'public/<%= pkg.name %>.js': 'app/index.js'
+      setup: {
+        files: {
+          'public/<%= pkg.name %>.vendor.js': ['vendor.js']
+        },
+        options: {
+          debug: grunt.cli.tasks[0] !== 'dist',
+          alias: [
+            'vendor/jquery/jquery.js:jquery',
+            'vendor/emblem/lib/emblem.js:emblem',
+            'vendor/ember-data/ember-data.js:ember-data',
+            'vendor/pouchdb/src/pouch.js:pouchdb',
+            // 'vendor/ember-pouchdb/dist/ember-pouchdb.js:ember-pouchdb',
+          ],
+          shim: {
+            handlebars: {
+              path: 'vendor/handlebars/handlebars.js',
+              exports: 'Handlebars'
+            },
+            ember: {
+              path: 'vendor/ember/ember.js',
+              exports: 'Ember'
+            },
+            'ember-pouchdb': {
+              path: 'vendor/ember-pouchdb/dist/ember-pouchdb.js',
+              exports: 'EPDB'
+            }
+          }
+        }
       },
-      options: {
-        debug: grunt.cli.tasks[0] !== 'dist',
-        alias: [
-          'lib/jquery.js:jquery',
-          'lib/handlebars.js:handlebars',
-          'lib/emblem.js:emblem',
-          'lib/ember.js:ember',
-          'lib/ember-data.js:ember-data',
-          'lib/pouchdb.js:pouchdb',
-          'lib/ember-pouchdb.js:ember-pouchdb',
-        ],
-        noparse: [
-          'lib/jquery.js',
-          'lib/handlebars.js',
-          'lib/emblem.js',
-          'lib/ember.js',
-          'lib/ember-data.js',
-          'lib/pouchdb.js',
-          'lib/ember-pouchdb.js',
-        ]
+      'default': {
+        files: {
+          'public/<%= pkg.name %>.js': ['app/**/*.js']
+        },
+        options: {
+          external: 'public/<%= pkg.name %>.vendor.js',
+          debug: grunt.cli.tasks[0] !== 'dist'
+        }
       }
     },
 
@@ -70,10 +84,10 @@ module.exports = function(grunt) {
         options: {
           root: 'app/templates/',
           dependencies: {
-            jquery: 'lib/jquery.js',
-            ember: 'lib/ember.js',
-            emblem: 'lib/emblem.js',
-            handlebars: 'lib/handlebars.js',
+            jquery: 'vendor/jquery/jquery.js',
+            ember: 'vendor/ember/ember.js',
+            emblem: 'vendor/emblem/dist/emblem.js',
+            handlebars: 'vendor/handlebars/handlebars.js',
           }
         }
       }
@@ -94,40 +108,12 @@ module.exports = function(grunt) {
     uglify: {
       'default': {
         files: {
-          'public/<%= pkg.name %>.min.js': ['tmp/<%= pkg.name %>.js']
+          'public/<%= pkg.name %>.min.js': ['public/<%= pkg.name %>.js']
+        },
+        options: {
+          report: 'min'
         }
       }
-    },
-
-    curl: {
-      jquery: {
-        src: 'http://code.jquery.com/jquery-1.10.2.js',
-        dest: 'lib/jquery.js'
-      },
-      handlebars: {
-        src: 'http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.1.2.js',
-        dest: 'lib/handlebars.js'
-      },
-      emblem: {
-        src: 'https://github.com/machty/emblem.js/raw/master/dist/emblem.js',
-        dest: 'lib/emblem.js'
-      },
-      ember: {
-        src: 'http://builds.emberjs.com/tags/v1.2.0/ember.js',
-        dest: 'lib/ember.js'
-      },
-      'ember-data': {
-        src: 'http://builds.emberjs.com/tags/v1.0.0-beta.3/ember-data.js',
-        dest: 'lib/ember-data.js'
-      },
-      'ember-pouchdb': {
-        src: 'https://raw.github.com/taras/ember-pouchdb/master/dist/ember-pouchdb.amd.js',
-        dest: 'lib/ember-pouchdb.js'
-      },
-      pouchdb: {
-        src: 'http://download.pouchdb.com/pouchdb.amd-nightly.js',
-        dest: 'lib/pouchdb.js'
-      },
     },
 
     clean: ['public'],
@@ -158,7 +144,7 @@ module.exports = function(grunt) {
       grunt.loadNpmTasks(task)
   })
   
-  grunt.registerTask('setup', ['curl'])
-  grunt.registerTask('default', ['stylus', 'emblem', 'browserify'])
-  grunt.registerTask('dist', ['clean', 'default', 'copy'])
+  grunt.registerTask('setup', ['bower_install', 'browserify:setup'])
+  grunt.registerTask('default', ['stylus', 'emblem', 'browserify:default', 'copy'])
+  grunt.registerTask('dist', ['clean', 'default', 'uglify', 'copy'])
 }
