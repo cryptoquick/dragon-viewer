@@ -45,8 +45,9 @@ module.exports = function(grunt) {
           alias: [
             'vendor/jquery/jquery.js:jquery',
             'vendor/emblem/lib/emblem.js:emblem',
-            'vendor/ember-data/ember-data.js:ember-data',
+            // ':ember-data',
             'vendor/pouchdb/src/pouch.js:pouchdb',
+            // 'vendor/ember-pouchdb-adapter/pouchdb_adapter.js:ember-pouchdb-adapter'
             // 'vendor/ember-pouchdb/dist/ember-pouchdb.js:ember-pouchdb',
           ],
           shim: {
@@ -56,11 +57,30 @@ module.exports = function(grunt) {
             },
             ember: {
               path: 'vendor/ember/ember.js',
-              exports: 'Ember'
+              exports: 'Ember',
+              depends: {
+                handlebars: 'Handlebars',
+                jquery: '$'
+              }
             },
-            'ember-pouchdb': {
+            'ember-data': {
+              path: 'vendor/ember-data/ember-data.js',
+              exports: 'DS',
+              depends: {
+                ember: 'Ember'
+              }
+            },
+            /*'ember-pouchdb': {
               path: 'vendor/ember-pouchdb/dist/ember-pouchdb.js',
               exports: 'EPDB'
+            },*/
+            'ember-pouchdb-adapter': {
+              path: 'vendor/ember-pouchdb-adapter/pouchdb_adapter.js',
+              exports: 'DS.PouchDBSerializer',
+              depends: {
+                ember: 'Ember',
+                'ember-data': 'DS'
+              }
             }
           }
         }
